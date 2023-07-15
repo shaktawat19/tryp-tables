@@ -1,6 +1,11 @@
 import React, { useMemo } from "react";
-import { useTable, useSortBy, useGlobalFilter } from "react-table";
-import GlobalFilter from './GlobalFilter';
+import {
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
+} from "react-table";
+import GlobalFilter from "./GlobalFilter";
 import MOCK_DATA from "./MOCK_DATA.json";
 import { format } from "date-fns";
 
@@ -49,19 +54,29 @@ const DataTable = (props) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    footerGroups,
     rows,
     prepareRow,
-    state: { globalFilter },
+    state: { globalFilter, pageIndex, pageSize },
     setGlobalFilter,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    gotoPage,
+    pageCount,
+    setPageSize,
   } = useTable(
     {
       columns,
       data,
       disableSortRemove: true,
+      initialState: { pageIndex: 2 },
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    usePagination
   );
 
   return (
@@ -85,7 +100,7 @@ const DataTable = (props) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
+          {page.map((row) => {
             prepareRow(row);
 
             return (
@@ -100,6 +115,45 @@ const DataTable = (props) => {
           })}
         </tbody>
       </table>
+      <div>
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>
+        </span>
+        | Go to page:{" "}
+        <input
+          type="number"
+          defaultValue={pageIndex + 1}
+          onChange={(e) => {
+            const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0;
+            gotoPage(pageNumber);
+          }}
+        />
+        <select
+          value={pageSize}
+          onChange={(e) => setPageSize(Number(e.target.value))}
+        >
+          {[10, 25, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show: {pageSize}
+            </option>
+          ))}
+        </select>
+        <button disabled={!canPreviousPage} onClick={() => gotoPage(0)}>
+          {"<<"}
+        </button>
+        <button disabled={!canNextPage} onClick={() => nextPage()}>
+          Next
+        </button>
+        <button disabled={!canPreviousPage} onClick={() => previousPage()}>
+          Previous
+        </button>
+        <button disabled={!canNextPage} onClick={() => gotoPage(pageCount - 1)}>
+          {">>"}
+        </button>
+      </div>
     </div>
   );
 };
