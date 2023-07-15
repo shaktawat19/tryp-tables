@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, useGlobalFilter } from "react-table";
+import GlobalFilter from './GlobalFilter';
 import MOCK_DATA from "./MOCK_DATA.json";
 import { format } from "date-fns";
 
@@ -51,18 +52,22 @@ const DataTable = (props) => {
     footerGroups,
     rows,
     prepareRow,
+    state: { globalFilter },
+    setGlobalFilter,
   } = useTable(
     {
       columns,
       data,
       disableSortRemove: true,
     },
+    useGlobalFilter,
     useSortBy
   );
 
   return (
     <div className="table-container">
       <h2>Table</h2>
+      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
 
       <table {...getTableProps()}>
         <thead>
