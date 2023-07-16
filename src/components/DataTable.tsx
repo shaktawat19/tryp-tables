@@ -4,7 +4,6 @@ import {
   useSortBy,
   useGlobalFilter,
   usePagination,
-  Row,
 } from "react-table";
 import GlobalFilter from "./GlobalFilter";
 
@@ -40,7 +39,6 @@ const DataTable = ({
       disableSortRemove: true,
       initialState: { pageIndex: 2 },
     },
-
     useGlobalFilter,
     useSortBy,
     usePagination
@@ -74,7 +72,7 @@ const DataTable = ({
                 className="min-w-full divide-y divide-gray-200"
                 {...getTableProps()}
               >
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-200">
                   {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
                       {sortable
@@ -119,7 +117,7 @@ const DataTable = ({
                   ))}
                 </thead>
                 <tbody
-                  className="bg-white divide-y divide-gray-200"
+                  className="bg-white divide-y divide-gray-200 [&>*:nth-child(odd)]:bg-gray-50"
                   {...getTableBodyProps()}
                 >
                   {rowData.map((row) => {
@@ -189,20 +187,32 @@ const DataTable = ({
           </div>
 
           <div
-            className="rounded-md p-1 flex items-center justify-between bg-white"
+            className="rounded-md p-1 flex items-center justify-between bg-white border-solid border-2 border-gray-50"
             aria-label="Pagination"
           >
-            <button disabled={!canPreviousPage} onClick={() => gotoPage(0)}>
+            <button
+              disabled={!canPreviousPage}
+              onClick={() => gotoPage(0)}
+              className="hover:bg-gray-50"
+            >
               <span className="  p-2 h-3 w-5 text-gray-400" aria-hidden="true">
                 {"<<"}
               </span>
             </button>
-            <button disabled={!canPreviousPage} onClick={() => previousPage()}>
+            <button
+              disabled={!canPreviousPage}
+              onClick={() => previousPage()}
+              className="hover:bg-gray-50"
+            >
               <span className=" p-2 h-3 w-5 text-gray-400" aria-hidden="true">
                 {"<"}
               </span>
             </button>
-            <button disabled={!canNextPage} onClick={() => nextPage()}>
+            <button
+              disabled={!canNextPage}
+              onClick={() => nextPage()}
+              className="hover:bg-gray-50"
+            >
               <span className=" p-2 h-3 w-5 text-gray-400" aria-hidden="true">
                 {">"}
               </span>
@@ -211,6 +221,7 @@ const DataTable = ({
             <button
               disabled={!canNextPage}
               onClick={() => gotoPage(pageCount - 1)}
+              className="hover:bg-gray-50"
             >
               <span className=" p-2 h-3 w-5 text-gray-400" aria-hidden="true">
                 {">>"}

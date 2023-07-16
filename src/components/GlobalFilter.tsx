@@ -13,13 +13,14 @@ const GlobalFilter = ({ filter, setFilter }) => {
     <span>
       Search:{" "}
       <input
-        className="p-1 rounded-md border-none outline-none shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        className="text-sm p-1 rounded-md border-none outline-none shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 font-light"
         type="text"
         value={value || ""}
         onChange={(e) => {
           setValue(e.target.value);
           onChange(e.target.value);
         }}
+        placeholder="Search name"
       />
     </span>
   );
