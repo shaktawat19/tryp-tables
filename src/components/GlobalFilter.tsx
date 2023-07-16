@@ -20,7 +20,7 @@ const GlobalFilter = ({ filter, setFilter }) => {
           setValue(e.target.value);
           onChange(e.target.value);
         }}
-        placeholder="Search name"
+        placeholder="Search name, country, ..."
       />
     </span>
   );

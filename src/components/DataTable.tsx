@@ -6,6 +6,7 @@ import {
   usePagination,
 } from "react-table";
 import GlobalFilter from "./GlobalFilter";
+import { DataTableProps } from "@/models/tableTypes";
 
 const DataTable = ({
   data,
@@ -14,7 +15,7 @@ const DataTable = ({
   filterable,
   pagination,
   caption,
-}) => {
+}: DataTableProps) => {
   let {
     getTableProps,
     getTableBodyProps,
@@ -124,10 +125,11 @@ const DataTable = ({
                     prepareRow(row);
 
                     return (
-                      <tr {...row.getRowProps()}>
+                      <tr key={row.id} {...row.getRowProps()}>
                         {row.cells.map((cell) => {
                           return (
                             <td
+                              key={cell.id}
                               className="px-6 py-4 whitespace-nowrap"
                               {...cell.getCellProps()}
                             >
