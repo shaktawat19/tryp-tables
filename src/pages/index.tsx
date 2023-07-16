@@ -1,7 +1,7 @@
 import DataTable from "@/components/DataTable";
-import MOCK_DATA from "@/components/MOCK_DATA.json";
+// import MOCK_DATA from "@/components/MOCK_DATA.json";
 import { format } from "date-fns";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 const COLUMNS = [
   {
@@ -40,25 +40,53 @@ const COLUMNS = [
   },
 ];
 
-export default function Home() {
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
+const getData = async () => {
+  const res = await fetch("http://localhost:3000/api/dataTable", {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+};
+
+function Home() {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function dataFetch() {
+      const data = await getData();
+      setData(data);
+      setIsLoading(false);
+    }
+    dataFetch();
+  }, []);
+
   return (
     <div>
       <div className="min-h-screen bg-gray-100 text-gray-900">
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
           <div className="mt-4">
-            <DataTable
-              data={data}
-              columns={columns}
-              sortable
-              filterable
-              pagination
-              caption={"React Table"}
-            />
+            {isLoading ? (
+              <span className="text-5xl">{"Loading..."}</span>
+            ) : (
+              <DataTable
+                data={data}
+                columns={COLUMNS}
+                sortable
+                filterable
+                pagination
+                caption={"React Table"}
+              />
+            )}
           </div>
         </main>
       </div>
     </div>
   );
 }
+
+export default Home;
